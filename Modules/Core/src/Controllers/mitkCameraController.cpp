@@ -217,18 +217,18 @@ void mitk::CameraController::Zoom(ScalarType factor, const Point2D &zoomPointInM
   if (this->GetRenderer()->GetMapperID() == BaseRenderer::Standard2D)
   {
     double parallelScale = this->GetRenderer()->GetVtkRenderer()->GetActiveCamera()->GetParallelScale() / factor;
-    if (this->GetRenderer()->GetConstrainZoomingAndPanning() && factor < 1.0)
-    {
-      double maxParallelScale = ComputeMaxParallelScale();
-      if (maxParallelScale - parallelScale * factor <
-          mitk::eps) // this is not the famous 05-bug... Return if already near max zooming
-        return;
+    //if (this->GetRenderer()->GetConstrainZoomingAndPanning() && factor < 1.0)
+    //{
+    //  double maxParallelScale = ComputeMaxParallelScale();
+    //  if (maxParallelScale - parallelScale * factor <
+    //      mitk::eps) // this is not the famous 05-bug... Return if already near max zooming
+    //    return;
 
-      if (parallelScale > maxParallelScale)
-      {
-        parallelScale = maxParallelScale;
-      }
-    }
+    //  if (parallelScale > maxParallelScale)
+    //  {
+    //    parallelScale = maxParallelScale;
+    //  }
+    //}
     this->GetRenderer()->GetVtkRenderer()->GetActiveCamera()->SetParallelScale(parallelScale);
     // Move camera in a way that the clicked point stays visible on the display where it was.
     Point2D planePoint = GetCameraPositionOnPlane();
@@ -262,6 +262,7 @@ void mitk::CameraController::AdjustCameraToPlane(const Point2D &PlanePoint)
     {
       double parallelScale = this->GetRenderer()->GetVtkRenderer()->GetActiveCamera()->GetParallelScale();
       double maxParallelScale = ComputeMaxParallelScale();
+      maxParallelScale=1000000;
       if (parallelScale > maxParallelScale)
       {
         this->GetRenderer()->GetVtkRenderer()->GetActiveCamera()->SetParallelScale(maxParallelScale);
