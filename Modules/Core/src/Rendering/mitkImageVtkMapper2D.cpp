@@ -798,8 +798,8 @@ void mitk::ImageVtkMapper2D::SetDefaultProperties(mitk::DataNode *node, mitk::Ba
       node->AddProperty("Image.Displayed Component", mitk::IntProperty::New(0), renderer, overwrite);
     }
   }
-
   // some more properties specific for a binary...
+  isBinaryImage = false;
   if (isBinaryImage)
   {
     node->AddProperty("opacity", mitk::FloatProperty::New(0.3f), renderer, overwrite);
@@ -1132,7 +1132,6 @@ mitk::ImageVtkMapper2D::LocalStorage::LocalStorage()
   // built a default lookuptable
   mitkLUT->SetType(mitk::LookupTable::GRAYSCALE);
   m_DefaultLookupTable = mitkLUT->GetVtkLookupTable();
-
   mitkLUT->SetType(mitk::LookupTable::LEGACY_BINARY);
   m_BinaryLookupTable = mitkLUT->GetVtkLookupTable();
 
