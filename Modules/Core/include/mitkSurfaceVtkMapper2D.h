@@ -57,12 +57,13 @@ namespace mitk
   {
   public:
     mitkClassMacro(SurfaceVtkMapper2D, VtkMapper);
-
+    
     itkFactorylessNewMacro(Self);
 
     itkCloneMacro(Self);
 
-      virtual const mitk::Surface *GetInput() const;
+    void SetSurface2DFilled(bool v);
+    virtual const mitk::Surface *GetInput() const;
 
     /** \brief returns the prop assembly */
     vtkProp *GetVtkProp(mitk::BaseRenderer *renderer) override;
@@ -210,6 +211,7 @@ namespace mitk
        * @param renderer The respective renderer of the mitkRenderWindow.
        */
     void Update(BaseRenderer *renderer) override;
+    bool m_filled{0};
   };
 } // namespace mitk
 #endif

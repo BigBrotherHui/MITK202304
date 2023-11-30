@@ -37,6 +37,7 @@ found in the LICENSE file.
 #include <vtkReverseSense.h>
 #include <vtkTransformPolyDataFilter.h>
 
+#include <vtkContourTriangulator.h>
 // constructor LocalStorage
 mitk::SurfaceVtkMapper2D::LocalStorage::LocalStorage()
 {
@@ -91,6 +92,11 @@ mitk::SurfaceVtkMapper2D::LocalStorage::LocalStorage()
 // destructor LocalStorage
 mitk::SurfaceVtkMapper2D::LocalStorage::~LocalStorage()
 {
+}
+
+void mitk::SurfaceVtkMapper2D::SetSurface2DFilled(bool v) {
+  m_filled = v;
+  Modified();
 }
 
 const mitk::Surface *mitk::SurfaceVtkMapper2D::GetInput() const
@@ -231,8 +237,25 @@ void mitk::SurfaceVtkMapper2D::GenerateDataForRenderer(mitk::BaseRenderer *rende
   vtkSmartPointer<vtkTransformPolyDataFilter> filter = vtkSmartPointer<vtkTransformPolyDataFilter>::New();
   filter->SetTransform(vtktransform);
   filter->SetInputData(inputPolyData);
-  localStorage->m_Cutter->SetInputConnection(filter->GetOutputPort());
-  localStorage->m_Cutter->Update();
+  if (m_filled)
+  {
+    localStorage->m_Cutter->SetInputConnection(filter->GetOutputPort());
+    localStorage->m_Cutter->Update();
+    vtkSmartPointer<vtkContourTriangulator> poly = vtkSmartPointer<vtkContourTriangulator>::New();
+    poly->TriangulationErrorDisplayOn();
+    poly->SetInputConnection(localStorage->m_Cutter->GetOutputPort());
+    poly->Update();
+    if (poly->GetOutput()->GetNumberOfPoints()>0)
+      localStorage->m_Mapper->SetInputData(poly->GetOutput());
+    else
+      localStorage->m_Mapper->SetInputData(localStorage->m_Cutter->GetOutput());
+  }
+  else
+  {
+    localStorage->m_Cutter->SetInputConnection(filter->GetOutputPort());
+    localStorage->m_Cutter->Update();
+    localStorage->m_Mapper->SetInputData(localStorage->m_Cutter->GetOutput());
+  }
 
   bool generateNormals = false;
   node->GetBoolProperty("draw normals 2D", generateNormals);
