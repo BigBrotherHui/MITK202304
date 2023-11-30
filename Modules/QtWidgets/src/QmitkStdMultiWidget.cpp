@@ -32,6 +32,7 @@ found in the LICENSE file.
 #include <mitkStatusBar.h>
 #include <mitkDisplayActionEventHandlerStd.h>
 #include <mitkVtkLayerController.h>
+#include <mitkDisplayActionEventFunctions.h>
 
 // qt
 #include <QList>
@@ -60,6 +61,51 @@ QmitkStdMultiWidget::~QmitkStdMultiWidget()
   {
     m_TimeNavigationController->Disconnect(renderWindow->GetSliceNavigationController());
   }
+}
+
+void QmitkStdMultiWidget::ResetView()
+{
+  auto dataStorage = GetDataStorage();
+  if (nullptr == dataStorage)
+  {
+    return;
+  }
+  for (int i = 0; i < GetNumberOfRenderWindowWidgets(); ++i)
+  {
+    mitk::RenderingManager::GetInstance()->InitializeViewByBoundingObjects(GetRenderWindow(i)->renderWindow(),
+                                                                           dataStorage);
+  }
+}
+
+mitk::StdFunctionCommand::ActionFunction QmitkStdMultiWidget::SetCrosshairSynchronizedAction() {
+  auto actionFunction = [&](const itk::EventObject &displayInteractorEvent)
+  {
+    if (mitk::DisplaySetCrosshairEvent().CheckEvent(&displayInteractorEvent))
+    {
+      const mitk::DisplaySetCrosshairEvent *displayActionEvent =
+        dynamic_cast<const mitk::DisplaySetCrosshairEvent *>(&displayInteractorEvent);
+      const mitk::BaseRenderer::Pointer sendingRenderer = displayActionEvent->GetSender();
+      if (nullptr == sendingRenderer || sendingRenderer->GetMapperID() == mitk::BaseRenderer::Standard3D)
+      {
+        return;
+      }
+
+      for (int i=0;i<GetNumberOfRenderWindowWidgets();++i)
+      {
+        auto renderWindow = GetRenderWindow(i)->GetVtkRenderWindow();
+        if (mitk::BaseRenderer::GetInstance(renderWindow)->GetMapperID() != mitk::BaseRenderer::Standard2D)
+            continue;
+        if (GetRenderWindow(i)->GetRenderer()->GetDataStorage() != displayActionEvent->GetSender()->GetDataStorage())
+            continue;
+        mitk::BaseRenderer::GetInstance(renderWindow)
+        ->GetSliceNavigationController()
+        ->SelectSliceByPoint(displayActionEvent->GetPosition());
+    
+      }
+    }
+  };
+
+  return actionFunction;
 }
 
 void QmitkStdMultiWidget::InitializeMultiWidget()
@@ -98,7 +144,30 @@ void QmitkStdMultiWidget::InitializeMultiWidget()
   auto displayActionEventHandler = GetDisplayActionEventHandler();
   if (nullptr != displayActionEventHandler)
   {
-    displayActionEventHandler->InitActions();
+    // displayActionEventHandler->InitActions();
+    // synchronized action event function
+    mitk::StdFunctionCommand::ActionFunction actionFunction = QmitkStdMultiWidget::SetCrosshairSynchronizedAction();
+    GetDisplayActionEventHandler()->ConnectDisplayActionEvent(mitk::DisplaySetCrosshairEvent(nullptr, mitk::Point3D()),
+                                                              actionFunction);
+
+    // desynchronized action event function
+    actionFunction = mitk::DisplayActionEventFunctions::MoveSenderCameraAction();
+    GetDisplayActionEventHandler()->ConnectDisplayActionEvent(mitk::DisplayMoveEvent(nullptr, mitk::Vector2D()),
+                                                              actionFunction);
+
+    // desynchronized action event function
+    actionFunction = mitk::DisplayActionEventFunctions::ZoomSenderCameraAction();
+    GetDisplayActionEventHandler()->ConnectDisplayActionEvent(mitk::DisplayZoomEvent(nullptr, 0.0, mitk::Point2D()),
+                                                              actionFunction);
+
+    // desynchronized action event function
+    actionFunction = mitk::DisplayActionEventFunctions::ScrollSliceStepperAction();
+    GetDisplayActionEventHandler()->ConnectDisplayActionEvent(mitk::DisplayScrollEvent(nullptr, 0, true),
+                                                              actionFunction);
+
+    actionFunction = mitk::DisplayActionEventFunctions::SetLevelWindowAction();
+    GetDisplayActionEventHandler()->ConnectDisplayActionEvent(
+      mitk::DisplaySetLevelWindowEvent(nullptr, mitk::ScalarType(), mitk::ScalarType()), actionFunction);
   }
 }
 
@@ -257,14 +326,7 @@ void QmitkStdMultiWidget::SetCrosshairGap(unsigned int gapSize)
 
 void QmitkStdMultiWidget::ResetCrosshair()
 {
-  auto dataStorage = GetDataStorage();
-  if (nullptr == dataStorage)
-  {
-    return;
-  }
-
-  mitk::RenderingManager::GetInstance()->InitializeViewsByBoundingObjects(dataStorage);
-
+  ResetView();
   SetWidgetPlaneMode(mitk::InteractionSchemeSwitcher::MITKStandard);
 }
 
