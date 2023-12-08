@@ -26,7 +26,8 @@ found in the LICENSE file.
 #include "mitkImageSource.h"
 #include "mitkLevelWindowProperty.h"
 #include "mitkRenderingManager.h"
-
+#include "mitkSurfaceVtkMapper2D.h"
+#include "mitkSurface.h"
 namespace mitk
 {
   itkEventMacroDefinition(InteractorChangedEvent, itk::AnyEvent);
@@ -585,7 +586,22 @@ void mitk::DataNode::PropertyListModified(const itk::Object * /*caller*/, const 
   Modified();
 }
 
-mitk::BaseProperty::ConstPointer mitk::DataNode::GetConstProperty(const std::string &propertyKey, const std::string &contextName, bool fallBackOnDefaultContext) const
+void mitk::DataNode::SetSurface2DFilled(bool filled) {
+  if (!m_Data)
+    return;
+  mitk::Surface* sur = dynamic_cast<mitk::Surface *>(GetData());
+  if (!sur)
+    return;
+  mitk::SurfaceVtkMapper2D::Pointer mapper = dynamic_cast<mitk::SurfaceVtkMapper2D *>(GetMapper(1));
+  if (!mapper)
+    return;
+  mapper->SetSurface2DFilled(filled);
+  Modified();
+}
+
+mitk::BaseProperty::ConstPointer mitk::DataNode::GetConstProperty(const std::string &propertyKey,
+                                                                  const std::string &contextName,
+                                                                  bool fallBackOnDefaultContext) const
 {
   if (propertyKey.empty())
     return nullptr;

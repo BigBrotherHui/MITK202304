@@ -173,10 +173,10 @@ bool mitk::DisplayActionEventBroadcast::FilterEvents(InteractionEvent* interacti
     return false;
   }
 
-  //if (BaseRenderer::Standard3D == sendingRenderer->GetMapperID())
-  //{
-  //  return false;
-  //}
+  if (BaseRenderer::Standard3D == sendingRenderer->GetMapperID())
+  {
+    return false;
+  }
 
   return true;
 }

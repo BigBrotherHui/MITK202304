@@ -71,7 +71,7 @@ namespace mitk
 
     mitkClassMacroItkParent(DataNode, itk::DataObject);
     itkFactorylessNewMacro(Self);
-
+    void SetSurface2DFilled(bool filled);
     // IPropertyProvider
     BaseProperty::ConstPointer GetConstProperty(const std::string &propertyKey, const std::string &contextName = "", bool fallBackOnDefaultContext = true) const override;
     std::vector<std::string> GetPropertyKeys(const std::string &contextName = "", bool includeDefaultContext = false) const override;
