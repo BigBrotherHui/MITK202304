@@ -73,4 +73,11 @@ set(MITK_MODULES
   REST
   RESTService
   DICOMweb
+  ExampleModule
+  LancetAlgo
+  LancetGeoUtil
+  LancetRegistration
+  LancetRobot
+  LancetIGT
+  LancetIGTUI
 )

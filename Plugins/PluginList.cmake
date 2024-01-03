@@ -36,7 +36,7 @@ set(MITK_PLUGINS
   org.mitk.gui.qt.igtexamples:OFF
   org.mitk.gui.qt.igttracking:OFF
   org.mitk.gui.qt.openigtlink:OFF
-  org.mitk.gui.qt.imagecropper:OFF
+  org.mitk.gui.qt.imagecropper:ON
   org.mitk.gui.qt.imagenavigator:ON
   org.mitk.gui.qt.viewnavigator:OFF
   org.mitk.gui.qt.materialeditor:OFF
@@ -85,4 +85,6 @@ set(MITK_PLUGINS
   org.mitk.gui.qt.flowapplication:OFF
   org.mitk.gui.qt.flow.segmentation:OFF
   org.mitk.gui.qt.pixelvalue:ON
+  org.mitk.gui.qt.exampleplugin:ON
+  org.mitk.lancet.dentalaccuracy:ON
 )
