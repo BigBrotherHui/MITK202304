@@ -89,7 +89,7 @@ set(MITK_PLUGINS
   org.mitk.lancet.dentalaccuracy:ON
   # org.mitk.ch.zhaw.graphcut:ON
   # org.mitk.ch.zhaw.materialmapping:ON
-  org.mitk.ch.zhaw.padding:ON
+  org.mitk.ch.zhaw.padding:OFF #depends on ch_zhaw_gemapplication
   # org.mitk.ch.zhaw.resample:ON
   # org.mitk.ch.zhaw.ugvisualization:ON
   # org.mitk.ch.zhaw.volumemesh:ON
@@ -97,4 +97,5 @@ set(MITK_PLUGINS
   # org.mitk.gui.qt.common.legacy:ON
   #plugins show begin with org.mitk.
   org.mitk.panorama:ON
+  org.mitk.gui.qt.elastix.registration:ON
 )

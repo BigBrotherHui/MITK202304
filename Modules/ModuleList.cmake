@@ -81,6 +81,7 @@ set(MITK_MODULES
   LancetIGT
   LancetIGTUI
   CudaExample
+  Elastix
   # GemCore
   # GemMesher
 )
