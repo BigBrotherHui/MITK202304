@@ -121,7 +121,7 @@ unsigned int mitk::IGTLDevice::ReceivePrivate(igtl::Socket* socket)
 
   // Receive generic header from the socket
   bool timeout = false;
-  auto r = socket->Receive(headerMsg->GetPackPointer(), headerMsg->GetPackSize(), timeout, 0);
+  int r = socket->Receive(headerMsg->GetPackPointer(), headerMsg->GetPackSize(),  0);//timeout,
 
   //MITK_INFO << "Server received r = " << r;
 

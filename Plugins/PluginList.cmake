@@ -98,4 +98,8 @@ set(MITK_PLUGINS
   #plugins show begin with org.mitk.
   org.mitk.panorama:ON
   org.mitk.gui.qt.elastix.registration:ON
+  org.mitk.navcas.planning:ON
+  org.mitk.navcas.registrationPlanning:ON
+  org.mitk.navcas.navApp:ON
+  org.mitk.navcas.navigationPlugins:ON
 )

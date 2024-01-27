@@ -82,6 +82,15 @@ set(MITK_MODULES
   LancetIGTUI
   CudaExample
   Elastix
+  CASLib
+	GraphicsLib
+	NodesManager
+	CASProject
+	CASMapper
+  IOUtil
+  CASWidgets
+  Algorithms
+  Interactors
   # GemCore
   # GemMesher
 )
