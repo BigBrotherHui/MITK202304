@@ -1,15 +1,18 @@
 set(CPP_FILES
   src/internal/PluginActivator.cpp
   src/internal/QmitkExampleView.cpp
+  src/internal/QmitkRefineView.cpp
 )
 
 set(UI_FILES
   src/internal/ExampleViewControls.ui
+  src/internal/RefineViewControls.ui
 )
 
 set(MOC_H_FILES
   src/internal/PluginActivator.h
   src/internal/QmitkExampleView.h
+  src/internal/QmitkRefineView.h
 )
 
 # List of resource files that can be used by the plugin system without loading

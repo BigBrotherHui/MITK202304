@@ -10,15 +10,7 @@ found in the LICENSE file.
 
 ============================================================================*/
 
-#include "PluginActivator.h"
-#include "QmitkExampleView.h"
-#include "QmitkRefineView.h"
+#include "RefineModule.h"
 
-void PluginActivator::start(ctkPluginContext* context)
-{
-  BERRY_REGISTER_EXTENSION_CLASS(QmitkRefineView, context)
-}
-
-void PluginActivator::stop(ctkPluginContext*)
-{
+void RefineModule::ForceLinkage() {
 }

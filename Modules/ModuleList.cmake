@@ -91,6 +91,7 @@ set(MITK_MODULES
   CASWidgets
   Algorithms
   Interactors
+  RefineModule
   # GemCore
   # GemMesher
 )

@@ -11,11 +11,11 @@ set(UI_FILES
 )
 
 set(MOC_H_FILES
-  include/ExampleSegTool2DGUI.h
+include/ExampleSegTool2DGUI.h
 )
 
 set(RESOURCE_FILES
-  Interactions/Paint.xml
+Interactions/Paint.xml
   Interactions/PaintConfig.xml
   ExampleIcon.svg
 )
