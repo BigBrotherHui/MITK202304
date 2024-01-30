@@ -43,7 +43,7 @@ igtl::MessageBase::Pointer mitk::IGTLDummyMessage::Clone()
 
   //copy the data
   clone->SetString(this->GetString());
-  clone->SetDummyString(this->GetDummyString());
+  //clone->SetDummyString(this->GetDummyString());
 
   return igtl::MessageBase::Pointer(clone.GetPointer());
 }
